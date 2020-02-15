@@ -34,10 +34,7 @@ class File < IO
   #
   #     File.absolute_path("~oracle/bin")       #=> "<relative_path>/~oracle/bin"
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.absolute_path(file_name [, dir_string] )  ->  abs_file_name
-  #
-  def self.absolute_path: (String file, ?String dir) -> String
+  def self.absolute_path: (string file_name, ?String dir_string) -> String
 
   # Returns `true` if `file_name` is an absolute path, and `false` otherwise.
   #
@@ -46,7 +43,7 @@ class File < IO
   # # arglists 💪👽🚨 << Delete this section
   #     File.absolute_path?(file_name)  ->  true or false
   #
-  def self.absolute_path?: (untyped) -> untyped
+  def self.absolute_path?: (String | _ToPath file_name) -> bool
 
   # Returns the last access time for the named file as a Time object.
   #
@@ -54,10 +51,7 @@ class File < IO
   #
   #     File.atime("testfile")   #=> Wed Apr 09 08:51:48 CDT 2003
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.atime(file_name)  ->  time
-  #
-  def self.atime: (untyped file) -> Time
+  def self.atime: (String | _ToPath | IO file_name) -> Time
 
   # Returns the last component of the filename given in *file_name* (after first
   # stripping trailing separators), which can be formed using both File::SEPARATOR
@@ -69,30 +63,21 @@ class File < IO
   #     File.basename("/home/gumby/work/ruby.rb", ".rb")   #=> "ruby"
   #     File.basename("/home/gumby/work/ruby.rb", ".*")    #=> "ruby"
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.basename(file_name [, suffix] )  ->  base_name
-  #
-  def self.basename: (String file, ?String suffix) -> String
+  def self.basename: (String | _ToPath file_name, ?String suffix) -> String
 
-  def self.birthtime: (untyped file) -> Time
+  def self.birthtime: (String | _ToPath | IO file_name) -> Time
 
   # Returns `true` if the named file is a block device.
   #
   # *file_name* can be an IO object.
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.blockdev?(file_name)   ->  true or false
-  #
-  def self.blockdev?: (String | IO file) -> bool
+  def self.blockdev?: (String | _ToPath | IO file_name) -> bool
 
   # Returns `true` if the named file is a character device.
   #
   # *file_name* can be an IO object.
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.chardev?(file_name)   ->  true or false
-  #
-  def self.chardev?: (String | IO file) -> bool
+  def self.chardev?: (String | _ToPath | IO file_name) -> bool
 
   # Changes permission bits on the named file(s) to the bit pattern represented by
   # *mode_int*. Actual effects are operating system dependent (see the beginning
@@ -101,10 +86,7 @@ class File < IO
   #
   #     File.chmod(0644, "testfile", "out")   #=> 2
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.chmod(mode_int, file_name, ... )  ->  integer
-  #
-  def self.chmod: (Integer mode, *String files) -> Integer
+  def self.chmod: (int mode, *(String | _ToPath) file_name) -> Integer
 
   # Changes the owner and group of the named file(s) to the given numeric owner
   # and group id's. Only a process with superuser privileges may change the owner
@@ -114,10 +96,7 @@ class File < IO
   #
   #     File.chown(nil, 100, "testfile")
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.chown(owner_int, group_int, file_name, ...)  ->  integer
-  #
-  def self.chown: (Integer owner, Integer group, *String files) -> Integer
+  def self.chown: (int? owner, int? group, *(String | _ToPath) file_name) -> Integer
 
   # Returns the change time for the named file (the time at which directory
   # information about the file was changed, not the file itself).
@@ -128,10 +107,7 @@ class File < IO
   #
   #     File.ctime("testfile")   #=> Wed Apr 09 08:53:13 CDT 2003
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.ctime(file_name)  -> time
-  #
-  def self.ctime: (untyped file) -> Time
+  def self.ctime: (String | _ToPath | IO file_name) -> Time
 
   # Deletes the named files, returning the number of names passed as arguments.
   # Raises an exception on any error. Since the underlying implementation relies
@@ -141,10 +117,7 @@ class File < IO
   #
   # See also Dir::rmdir.
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.delete(file_name, ...)  -> integer
-  #
-  def self.delete: (*String files) -> Integer
+  def self.delete: (*(String | _ToPath) file_name) -> Integer
 
   # Returns `true` if the named file is a directory, or a symlink that points at a
   # directory, and `false` otherwise.
@@ -153,10 +126,7 @@ class File < IO
   #
   #     File.directory?(".")
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.directory?(file_name)   ->  true or false
-  #
-  def self.directory?: (String | IO file) -> bool
+  def self.directory?: (String | _ToPath | IO path) -> bool
 
   # Returns all components of the filename given in *file_name* except the last
   # one (after first stripping trailing separators). The filename can be formed
@@ -165,19 +135,13 @@ class File < IO
   #
   #     File.dirname("/home/gumby/work/ruby.rb")   #=> "/home/gumby/work"
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.dirname(file_name)  ->  dir_name
-  #
-  def self.dirname: (String file) -> String
+  def self.dirname: (String | _ToPath file_name) -> String
 
   # Returns `true` if the named file exists and has a zero size.
   #
   # *file_name* can be an IO object.
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.zero?(file_name)   -> true or false
-  #
-  def self.empty?: (untyped) -> untyped
+  def self.empty?: (String | _ToPath | IO file_name) -> bool
 
   # Returns `true` if the named file is executable by the effective user and group
   # id of this process. See eaccess(3).
@@ -189,10 +153,7 @@ class File < IO
   # Note that some OS-level security features may cause this to return true even
   # though the file is not executable by the effective user/group.
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.executable?(file_name)   -> true or false
-  #
-  def self.executable?: (String file) -> bool
+  def self.executable?: (String | _ToPath file_name) -> bool
 
   # Returns `true` if the named file is executable by the real user and group id
   # of this process. See access(3).
@@ -204,10 +165,7 @@ class File < IO
   # Note that some OS-level security features may cause this to return true even
   # though the file is not executable by the real user/group.
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.executable_real?(file_name)   -> true or false
-  #
-  def self.executable_real?: (String file) -> bool
+  def self.executable_real?: (String | _ToPath file_name) -> bool
 
   # Return `true` if the named file exists.
   #
@@ -215,17 +173,11 @@ class File < IO
   #
   # "file exists" means that stat() or fstat() system call is successful.
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.exist?(file_name)    ->  true or false
-  #
-  def self.exist?: (untyped file) -> bool
+  def self.exist?: (String | _ToPath | IO file_name) -> bool
 
   # Deprecated method. Don't use.
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.exists?(file_name)   ->  true or false
-  #
-  def self.exists?: (untyped) -> untyped
+  alias self.exists? self.exist?
 
   # Converts a pathname to an absolute pathname. Relative paths are referenced
   # from the current working directory of the process unless `dir_string` is
@@ -248,10 +200,7 @@ class File < IO
   # So first it resolves the parent of __FILE__, that is bin/, then go to the
   # parent, the root of the project and appends `lib/mygem.rb`.
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.expand_path(file_name [, dir_string] )  ->  abs_file_name
-  #
-  def self.expand_path: (untyped file, ?untyped dir) -> String
+  def self.expand_path: (String | _ToPath file_name, ?(String | _ToPath) dir_string) -> String
 
   # Returns the extension (the portion of file name in `path` starting from the
   # last period).
@@ -273,10 +222,7 @@ class File < IO
   #     File.extname(".profile")        #=> ""
   #     File.extname(".profile.sh")     #=> ".sh"
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.extname(path)  ->  string
-  #
-  def self.extname: (String path) -> String
+  def self.extname: (String | _ToPath path) -> String
 
   # Returns `true` if the named `file` exists and is a regular file.
   #
@@ -285,10 +231,7 @@ class File < IO
   # If the `file` argument is a symbolic link, it will resolve the symbolic link
   # and use the file referenced by the link.
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.file?(file) -> true or false
-  #
-  def self.file?: (String | IO file) -> bool
+  def self.file?: (String | _ToPath | IO file) -> bool
 
   # Returns true if `path` matches against `pattern`.  The pattern is not a
   # regular expression; instead it follows rules similar to shell filename
@@ -385,11 +328,7 @@ class File < IO
   #     File.fnmatch(pattern, 'a/.b/c/foo', File::FNM_PATHNAME)    #=> false
   #     File.fnmatch(pattern, 'a/.b/c/foo', File::FNM_PATHNAME | File::FNM_DOTMATCH) #=> true
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.fnmatch( pattern, path, [flags] ) -> (true or false)
-  #     File.fnmatch?( pattern, path, [flags] ) -> (true or false)
-  #
-  def self.fnmatch: (String pattern, String path, ?Integer flags) -> bool
+  def self.fnmatch: (string pattern, String | _ToPath path, ?Integer flags) -> bool
 
   # Returns true if `path` matches against `pattern`.  The pattern is not a
   # regular expression; instead it follows rules similar to shell filename
@@ -486,10 +425,7 @@ class File < IO
   #     File.fnmatch(pattern, 'a/.b/c/foo', File::FNM_PATHNAME)    #=> false
   #     File.fnmatch(pattern, 'a/.b/c/foo', File::FNM_PATHNAME | File::FNM_DOTMATCH) #=> true
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.fnmatch?( pattern, path, [flags] ) -> (true or false)
-  #
-  def self.fnmatch?: (String pattern, String path, ?Integer flags) -> bool
+  alias self.fnmatch? self.fnmatch
 
   # Identifies the type of the named file; the return string is one of ```file`'',
   # ```directory`'', ```characterSpecial`'', ```blockSpecial`'', ```fifo`'',
@@ -499,20 +435,14 @@ class File < IO
   #     File.ftype("/dev/tty")            #=> "characterSpecial"
   #     File.ftype("/tmp/.X11-unix/X0")   #=> "socket"
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.ftype(file_name)   -> string
-  #
-  def self.ftype: (String file) -> String
+  def self.ftype: (String | _ToPath file_name) -> String
 
   # Returns `true` if the named file exists and the effective group id of the
   # calling process is the owner of the file. Returns `false` on Windows.
   #
   # *file_name* can be an IO object.
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.grpowned?(file_name)   -> true or false
-  #
-  def self.grpowned?: (String | IO file) -> bool
+  def self.grpowned?: (String | _ToPath | IO file_name) -> bool
 
   # Returns `true` if the named files are identical.
   #
@@ -528,37 +458,27 @@ class File < IO
   #     open("d", "w") {}
   #     p File.identical?("a", "d")      #=> false
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.identical?(file_1, file_2)   ->  true or false
-  #
-  def self.identical?: (String | IO file_1, String | IO file_2) -> bool
+  def self.identical?: (String | _ToPath | IO file_1, String | _ToPath | IO file_2) -> bool
 
   # Returns a new string formed by joining the strings using `"/"`.
   #
   #     File.join("usr", "mail", "gumby")   #=> "usr/mail/gumby"
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.join(string, ...)  ->  string
-  #
-  def self.join: (*untyped arg0) -> String
+
+  # TODO: 多分だめなきがするけど_ToStrでもいいかテストする
+  def self.join: (*String) -> String
 
   # Equivalent to File::chmod, but does not follow symbolic links (so it will
   # change the permissions associated with the link, not the file referenced by
   # the link). Often not available.
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.lchmod(mode_int, file_name, ...)  -> integer
-  #
-  def self.lchmod: (Integer mode, *String files) -> Integer
+  def self.lchmod: (int mode, *(String | _ToPath) file_name) -> Integer
 
   # Equivalent to File::chown, but does not follow symbolic links (so it will
   # change the owner associated with the link, not the file referenced by the
   # link). Often not available. Returns number of files in the argument list.
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.lchown(owner_int, group_int, file_name,..) -> integer
-  #
-  def self.lchown: (Integer owner, Integer group, *String files) -> Integer
+  def self.lchown: (int? owner, int? group, *(String | _ToPath) file_name) -> Integer
 
   # Creates a new name for an existing file using a hard link. Will not overwrite
   # *new_name* if it already exists (raising a subclass of SystemCallError). Not
@@ -567,10 +487,7 @@ class File < IO
   #     File.link("testfile", ".testfile")   #=> 0
   #     IO.readlines(".testfile")[0]         #=> "This is line one\n"
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.link(old_name, new_name)    -> 0
-  #
-  def self.link: (String old, String new) -> Integer
+  def self.link: (String | _ToPath old_name, String | _ToPath new_name) -> Integer
 
   # Same as File::stat, but does not follow the last symbolic link. Instead,
   # reports on the link itself.
@@ -580,10 +497,7 @@ class File < IO
   #     File.lstat("link2test").size            #=> 8
   #     File.stat("link2test").size             #=> 66
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.lstat(file_name)   -> stat
-  #
-  def self.lstat: (String file) -> File::Stat
+  def self.lstat: (String | _ToPath file_name) -> File::Stat
 
   # Sets the access and modification times of each named file to the first two
   # arguments. If a file is a symlink, this method acts upon the link itself as
@@ -841,10 +755,7 @@ class File < IO
   #
   # See also Dir::rmdir.
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.unlink(file_name, ...)  -> integer
-  #
-  def self.unlink: (*String files) -> Integer
+  alias self.unlink self.delete
 
   # Sets the access and modification times of each named file to the first two
   # arguments. If a file is a symlink, this method acts upon its referent rather
@@ -912,10 +823,7 @@ class File < IO
   #
   # *file_name* can be an IO object.
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File.zero?(file_name)   -> true or false
-  #
-  def self.zero?: (String | IO file) -> Integer?
+  alias self.zero? self.empty?
 
   public
 
