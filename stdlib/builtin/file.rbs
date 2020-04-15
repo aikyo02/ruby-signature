@@ -983,10 +983,13 @@ File::Constants::TRUNC: Integer
 
 File::Constants::WRONLY: Integer
 
-class File::Stat < Object
+class File::Stat
   include Comparable
 
+  public
+
   def initialize: (String file) -> Object
+
   def <=>: (File::Stat other) -> Integer?
 
   def atime: () -> Time
@@ -1037,13 +1040,13 @@ class File::Stat < Object
 
   def pipe?: () -> bool
 
+  def pretty_print: (untyped q) -> untyped
+
   def rdev: () -> Integer?
 
   def rdev_major: () -> Integer
 
   def rdev_minor: () -> Integer
-
-  def read: (?Integer length, ?String outbuf) -> String
 
   def readable?: () -> bool
 
@@ -1054,6 +1057,8 @@ class File::Stat < Object
   def setuid?: () -> bool
 
   def size: () -> Integer
+
+  def size?: () -> untyped
 
   def socket?: () -> bool
 
@@ -1072,4 +1077,8 @@ class File::Stat < Object
   def writable_real?: () -> bool
 
   def zero?: () -> bool
+
+  private
+
+  def initialize_copy: (self object) -> self
 end
