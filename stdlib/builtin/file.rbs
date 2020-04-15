@@ -26,6 +26,7 @@
 # Various constants for the methods in File can be found in File::Constants.
 #
 class File < IO
+  public
   # Opens the file named by `filename` according to the given `mode` and returns a
   # new File object.
   #
@@ -44,7 +45,7 @@ class File < IO
   #     f = File.new("newfile",  "w+")
   #     f = File.new("newfile", File::CREAT|File::TRUNC|File::RDWR, 0644)
   #
-  def initialize: (string | _ToPath | int file_name, ?(string | int) mode, ?int perm) -> File
+  def initialize: (string | _ToPath | int file_name, ?string | int mode, ?int perm) -> File
 
   # Converts a pathname to an absolute pathname. Relative paths are referenced
   # from the current working directory of the process unless *dir_string* is
@@ -54,7 +55,7 @@ class File < IO
   #
   #     File.absolute_path("~oracle/bin")       #=> "<relative_path>/~oracle/bin"
   #
-  def self.absolute_path: (string | _ToPath file_name, ?(string | _ToPath) dir_string) -> String
+  def self.absolute_path: (string | _ToPath file_name, ?string | _ToPath dir_string) -> String
 
   # Returns `true` if `file_name` is an absolute path, and `false` otherwise.
   #
@@ -106,7 +107,7 @@ class File < IO
   #
   #     File.chmod(0644, "testfile", "out")   #=> 2
   #
-  def self.chmod: (int mode, *(string | _ToPath) file_name) -> Integer
+  def self.chmod: (int mode, *string | _ToPath file_name) -> Integer
 
   # Changes the owner and group of the named file(s) to the given numeric owner
   # and group id's. Only a process with superuser privileges may change the owner
@@ -116,7 +117,7 @@ class File < IO
   #
   #     File.chown(nil, 100, "testfile")
   #
-  def self.chown: (int? owner, int? group, *(string | _ToPath) file_name) -> Integer
+  def self.chown: (int? owner, int? group, *string | _ToPath file_name) -> Integer
 
   # Returns the change time for the named file (the time at which directory
   # information about the file was changed, not the file itself).
@@ -220,7 +221,7 @@ class File < IO
   # So first it resolves the parent of __FILE__, that is bin/, then go to the
   # parent, the root of the project and appends `lib/mygem.rb`.
   #
-  def self.expand_path: (string | _ToPath file_name, ?(string | _ToPath) dir_string) -> String
+  def self.expand_path: (string | _ToPath file_name, ?string | _ToPath dir_string) -> String
 
   # Returns the extension (the portion of file name in `path` starting from the
   # last period).
@@ -490,13 +491,13 @@ class File < IO
   # change the permissions associated with the link, not the file referenced by
   # the link). Often not available.
   #
-  def self.lchmod: (int mode, *(string | _ToPath) file_name) -> Integer
+  def self.lchmod: (int mode, *string | _ToPath file_name) -> Integer
 
   # Equivalent to File::chown, but does not follow symbolic links (so it will
   # change the owner associated with the link, not the file referenced by the
   # link). Often not available. Returns number of files in the argument list.
   #
-  def self.lchown: (int? owner, int? group, *(string | _ToPath) file_name) -> Integer
+  def self.lchown: (int? owner, int? group, *string | _ToPath file_name) -> Integer
 
   # Creates a new name for an existing file using a hard link. Will not overwrite
   # *new_name* if it already exists (raising a subclass of SystemCallError). Not
@@ -522,13 +523,13 @@ class File < IO
   # opposed to its referent; for the inverse behavior, see File.utime. Returns the
   # number of file names in the argument list.
   #
-  def self.lutime: ((Time | Numeric) atime, (Time | Numeric) mtime, *(string | _ToPath) file_name) -> Integer
+  def self.lutime: (Time | Numeric atime, Time | Numeric mtime, *string | _ToPath file_name) -> Integer
 
   # Creates a FIFO special file with name *file_name*.  *mode* specifies the
   # FIFO's permissions. It is modified by the process's umask in the usual way:
   # the permissions of the created file are (mode & ~umask).
   #
-  def self.mkfifo: ((string | _ToPath) file_name, ?int mode) -> 0
+  def self.mkfifo: (string | _ToPath file_name, ?int mode) -> 0
 
   # Returns the modification time for the named file as a Time object.
   #
@@ -590,7 +591,7 @@ class File < IO
   #
   # The last component of the real pathname can be nonexistent.
   #
-  def self.realdirpath: (string | _ToPath pathname, ?(string | _ToPath) dir_string) -> String
+  def self.realdirpath: (string | _ToPath pathname, ?string | _ToPath dir_string) -> String
 
   # Returns the real (absolute) pathname of *pathname* in the actual filesystem
   # not containing symlinks or useless dots.
@@ -600,7 +601,7 @@ class File < IO
   #
   # All components of the pathname must exist when this method is called.
   #
-  def self.realpath: (string | _ToPath pathname, ?(string | _ToPath) dir_string) -> String
+  def self.realpath: (string | _ToPath pathname, ?string | _ToPath dir_string) -> String
 
   # Renames the given file to the new name. Raises a SystemCallError if the file
   # cannot be renamed.
@@ -645,7 +646,7 @@ class File < IO
   #
   #     File.split("/home/gumby/.profile")   #=> ["/home/gumby", ".profile"]
   #
-  def self.split: (string | _ToPath file_name) -> [String, String]
+  def self.split: (string | _ToPath file_name) -> [ String, String ]
 
   # Returns a File::Stat object for the named file (see File::Stat).
   #
@@ -700,14 +701,14 @@ class File < IO
   #
   # See also Dir::rmdir.
   #
-  def self.unlink: (*(string | _ToPath) file_name) -> Integer
+  def self.unlink: (*string | _ToPath file_name) -> Integer
 
   # Sets the access and modification times of each named file to the first two
   # arguments. If a file is a symlink, this method acts upon its referent rather
   # than the link itself; for the inverse behavior see File.lutime. Returns the
   # number of file names in the argument list.
   #
-  def self.utime: ((Time | Numeric) atime, (Time | Numeric) mtime, *(string | _ToPath) file_name) -> Integer
+  def self.utime: (Time | Numeric atime, Time | Numeric mtime, *string | _ToPath file_name) -> Integer
 
   # If *file_name* is readable by others, returns an integer representing the file
   # permission bits of *file_name*. Returns `nil` otherwise. The meaning of the
@@ -754,8 +755,6 @@ class File < IO
   # *file_name* can be an IO object.
   #
   def self.zero?: (string | _ToPath | IO file_name) -> bool
-
-  public
 
   # Returns the last access time (a Time object) for *file*, or epoch if *file*
   # has not been accessed.
