@@ -27,6 +27,7 @@
 #
 class File < IO
   public
+
   # Opens the file named by `filename` according to the given `mode` and returns a
   # new File object.
   #
@@ -983,99 +984,479 @@ File::Constants::TRUNC: Integer
 
 File::Constants::WRONLY: Integer
 
+# Objects of class File::Stat encapsulate common status information for File
+# objects. The information is recorded at the moment the File::Stat object is
+# created; changes made to the file after that point will not be reflected.
+# File::Stat objects are returned by IO#stat, File::stat, File#lstat, and
+# File::lstat. Many of these methods return platform-specific values, and not
+# all values are meaningful on all systems. See also Kernel#test.
+#
 class File::Stat
   include Comparable
 
   public
 
+  # Create a File::Stat object for the given file name (raising an exception if
+  # the file doesn't exist).
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     File::Stat.new(file_name)  -> stat
+  #
   def initialize: (String file) -> Object
 
+  # Compares File::Stat objects by comparing their respective modification times.
+  #
+  # `nil` is returned if `other_stat` is not a File::Stat object
+  #
+  #     f1 = File.new("f1", "w")
+  #     sleep 1
+  #     f2 = File.new("f2", "w")
+  #     f1.stat <=> f2.stat   #=> -1
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat <=> other_stat    -> -1, 0, 1, nil
+  #
   def <=>: (File::Stat other) -> Integer?
 
+  # Returns the last access time for this file as an object of class Time.
+  #
+  #     File.stat("testfile").atime   #=> Wed Dec 31 18:00:00 CST 1969
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.atime   -> time
+  #
   def atime: () -> Time
 
+  # Returns the birth time for *stat*.
+  #
+  # If the platform doesn't have birthtime, raises NotImplementedError.
+  #
+  #     File.write("testfile", "foo")
+  #     sleep 10
+  #     File.write("testfile", "bar")
+  #     sleep 10
+  #     File.chmod(0644, "testfile")
+  #     sleep 10
+  #     File.read("testfile")
+  #     File.stat("testfile").birthtime   #=> 2014-02-24 11:19:17 +0900
+  #     File.stat("testfile").mtime       #=> 2014-02-24 11:19:27 +0900
+  #     File.stat("testfile").ctime       #=> 2014-02-24 11:19:37 +0900
+  #     File.stat("testfile").atime       #=> 2014-02-24 11:19:47 +0900
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.birthtime  ->  aTime
+  #
   def birthtime: () -> Time
 
+  # Returns the native file system's block size. Will return `nil` on platforms
+  # that don't support this information.
+  #
+  #     File.stat("testfile").blksize   #=> 4096
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.blksize   -> integer or nil
+  #
   def blksize: () -> Integer?
 
+  # Returns `true` if the file is a block device, `false` if it isn't or if the
+  # operating system doesn't support this feature.
+  #
+  #     File.stat("testfile").blockdev?    #=> false
+  #     File.stat("/dev/hda1").blockdev?   #=> true
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.blockdev?   -> true or false
+  #
   def blockdev?: () -> bool
 
+  # Returns the number of native file system blocks allocated for this file, or
+  # `nil` if the operating system doesn't support this feature.
+  #
+  #     File.stat("testfile").blocks   #=> 2
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.blocks    -> integer or nil
+  #
   def blocks: () -> Integer?
 
+  # Returns `true` if the file is a character device, `false` if it isn't or if
+  # the operating system doesn't support this feature.
+  #
+  #     File.stat("/dev/tty").chardev?   #=> true
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.chardev?    -> true or false
+  #
   def chardev?: () -> bool
 
+  # Returns the change time for *stat* (that is, the time directory information
+  # about the file was changed, not the file itself).
+  #
+  # Note that on Windows (NTFS), returns creation time (birth time).
+  #
+  #     File.stat("testfile").ctime   #=> Wed Apr 09 08:53:14 CDT 2003
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.ctime  ->  aTime
+  #
   def ctime: () -> Time
 
+  # Returns an integer representing the device on which *stat* resides.
+  #
+  #     File.stat("testfile").dev   #=> 774
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.dev    -> integer
+  #
   def dev: () -> Integer
 
+  # Returns the major part of `File_Stat#dev` or `nil`.
+  #
+  #     File.stat("/dev/fd1").dev_major   #=> 2
+  #     File.stat("/dev/tty").dev_major   #=> 5
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.dev_major   -> integer
+  #
   def dev_major: () -> Integer
 
+  # Returns the minor part of `File_Stat#dev` or `nil`.
+  #
+  #     File.stat("/dev/fd1").dev_minor   #=> 1
+  #     File.stat("/dev/tty").dev_minor   #=> 0
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.dev_minor   -> integer
+  #
   def dev_minor: () -> Integer
 
+  # Returns `true` if the named file is a directory, or a symlink that points at a
+  # directory, and `false` otherwise.
+  #
+  # *file_name* can be an IO object.
+  #
+  #     File.directory?(".")
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     File.directory?(file_name)   ->  true or false
+  #
   def directory?: () -> bool
 
+  # Returns `true` if *stat* is executable or if the operating system doesn't
+  # distinguish executable files from nonexecutable files. The tests are made
+  # using the effective owner of the process.
+  #
+  #     File.stat("testfile").executable?   #=> false
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.executable?    -> true or false
+  #
   def executable?: () -> bool
 
+  # Same as `executable?`, but tests using the real owner of the process.
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.executable_real?    -> true or false
+  #
   def executable_real?: () -> bool
 
+  # Returns `true` if *stat* is a regular file (not a device file, pipe, socket,
+  # etc.).
+  #
+  #     File.stat("testfile").file?   #=> true
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.file?    -> true or false
+  #
   def file?: () -> bool
 
+  # Identifies the type of *stat*. The return string is one of: ```file`'',
+  # ```directory`'', ```characterSpecial`'', ```blockSpecial`'', ```fifo`'',
+  # ```link`'', ```socket`'', or ```unknown`''.
+  #
+  #     File.stat("/dev/tty").ftype   #=> "characterSpecial"
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.ftype   -> string
+  #
   def ftype: () -> String
 
+  # Returns the numeric group id of the owner of *stat*.
+  #
+  #     File.stat("testfile").gid   #=> 500
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.gid   -> integer
+  #
   def gid: () -> Integer
 
+  # Returns true if the effective group id of the process is the same as the group
+  # id of *stat*. On Windows NT, returns `false`.
+  #
+  #     File.stat("testfile").grpowned?      #=> true
+  #     File.stat("/etc/passwd").grpowned?   #=> false
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.grpowned?   -> true or false
+  #
   def grpowned?: () -> bool
 
+  # Returns the inode number for *stat*.
+  #
+  #     File.stat("testfile").ino   #=> 1083669
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.ino   -> integer
+  #
   def ino: () -> Integer
 
+  # Produce a nicely formatted description of *stat*.
+  #
+  #     File.stat("/etc/passwd").inspect
+  #        #=> "#<File::Stat dev=0xe000005, ino=1078078, mode=0100644,
+  #        #    nlink=1, uid=0, gid=0, rdev=0x0, size=1374, blksize=4096,
+  #        #    blocks=8, atime=Wed Dec 10 10:16:12 CST 2003,
+  #        #    mtime=Fri Sep 12 15:41:41 CDT 2003,
+  #        #    ctime=Mon Oct 27 11:20:27 CST 2003,
+  #        #    birthtime=Mon Aug 04 08:13:49 CDT 2003>"
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.inspect  ->  string
+  #
   def inspect: () -> String
 
+  # Returns an integer representing the permission bits of *stat*. The meaning of
+  # the bits is platform dependent; on Unix systems, see `stat(2)`.
+  #
+  #     File.chmod(0644, "testfile")   #=> 1
+  #     s = File.stat("testfile")
+  #     sprintf("%o", s.mode)          #=> "100644"
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.mode   -> integer
+  #
   def mode: () -> Integer
 
+  # Returns the modification time of *stat*.
+  #
+  #     File.stat("testfile").mtime   #=> Wed Apr 09 08:53:14 CDT 2003
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.mtime  ->  aTime
+  #
   def mtime: () -> Time
 
+  # Returns the number of hard links to *stat*.
+  #
+  #     File.stat("testfile").nlink             #=> 1
+  #     File.link("testfile", "testfile.bak")   #=> 0
+  #     File.stat("testfile").nlink             #=> 2
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.nlink   -> integer
+  #
   def nlink: () -> Integer
 
+  # Returns `true` if the effective user id of the process is the same as the
+  # owner of *stat*.
+  #
+  #     File.stat("testfile").owned?      #=> true
+  #     File.stat("/etc/passwd").owned?   #=> false
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.owned?    -> true or false
+  #
   def owned?: () -> bool
 
+  # Returns `true` if the operating system supports pipes and *stat* is a pipe;
+  # `false` otherwise.
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.pipe?    -> true or false
+  #
   def pipe?: () -> bool
 
   def pretty_print: (untyped q) -> untyped
 
+  # Returns an integer representing the device type on which *stat* resides.
+  # Returns `nil` if the operating system doesn't support this feature.
+  #
+  #     File.stat("/dev/fd1").rdev   #=> 513
+  #     File.stat("/dev/tty").rdev   #=> 1280
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.rdev   ->  integer or nil
+  #
   def rdev: () -> Integer?
 
+  # Returns the major part of `File_Stat#rdev` or `nil`.
+  #
+  #     File.stat("/dev/fd1").rdev_major   #=> 2
+  #     File.stat("/dev/tty").rdev_major   #=> 5
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.rdev_major   -> integer
+  #
   def rdev_major: () -> Integer
 
+  # Returns the minor part of `File_Stat#rdev` or `nil`.
+  #
+  #     File.stat("/dev/fd1").rdev_minor   #=> 1
+  #     File.stat("/dev/tty").rdev_minor   #=> 0
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.rdev_minor   -> integer
+  #
   def rdev_minor: () -> Integer
 
+  # Returns `true` if *stat* is readable by the effective user id of this process.
+  #
+  #     File.stat("testfile").readable?   #=> true
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.readable?    -> true or false
+  #
   def readable?: () -> bool
 
+  # Returns `true` if *stat* is readable by the real user id of this process.
+  #
+  #     File.stat("testfile").readable_real?   #=> true
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.readable_real?  ->  true or false
+  #
   def readable_real?: () -> bool
 
+  # Returns `true` if *stat* has the set-group-id permission bit set, `false` if
+  # it doesn't or if the operating system doesn't support this feature.
+  #
+  #     File.stat("/usr/sbin/lpc").setgid?   #=> true
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.setgid?   -> true or false
+  #
   def setgid?: () -> bool
 
+  # Returns `true` if *stat* has the set-user-id permission bit set, `false` if it
+  # doesn't or if the operating system doesn't support this feature.
+  #
+  #     File.stat("/bin/su").setuid?   #=> true
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.setuid?    -> true or false
+  #
   def setuid?: () -> bool
 
+  # Returns the size of *stat* in bytes.
+  #
+  #     File.stat("testfile").size   #=> 66
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.size    -> integer
+  #
   def size: () -> Integer
 
+  # Returns the size of *stat* in bytes.
+  #
+  #     File.stat("testfile").size   #=> 66
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     state.size    -> integer
+  #
   def size?: () -> untyped
 
+  # Returns `true` if *stat* is a socket, `false` if it isn't or if the operating
+  # system doesn't support this feature.
+  #
+  #     File.stat("testfile").socket?   #=> false
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.socket?    -> true or false
+  #
   def socket?: () -> bool
 
+  # Returns `true` if *stat* has its sticky bit set, `false` if it doesn't or if
+  # the operating system doesn't support this feature.
+  #
+  #     File.stat("testfile").sticky?   #=> false
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.sticky?    -> true or false
+  #
   def sticky?: () -> bool
 
+  # Returns `true` if *stat* is a symbolic link, `false` if it isn't or if the
+  # operating system doesn't support this feature. As File::stat automatically
+  # follows symbolic links, #symlink? will always be `false` for an object
+  # returned by File::stat.
+  #
+  #     File.symlink("testfile", "alink")   #=> 0
+  #     File.stat("alink").symlink?         #=> false
+  #     File.lstat("alink").symlink?        #=> true
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.symlink?    -> true or false
+  #
   def symlink?: () -> bool
 
+  # Returns the numeric user id of the owner of *stat*.
+  #
+  #     File.stat("testfile").uid   #=> 501
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.uid    -> integer
+  #
   def uid: () -> Integer
 
+  # If *stat* is readable by others, returns an integer representing the file
+  # permission bits of *stat*. Returns `nil` otherwise. The meaning of the bits is
+  # platform dependent; on Unix systems, see `stat(2)`.
+  #
+  #     m = File.stat("/etc/passwd").world_readable?  #=> 420
+  #     sprintf("%o", m)                              #=> "644"
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.world_readable? -> integer or nil
+  #
   def world_readable?: () -> Integer?
 
+  # If *stat* is writable by others, returns an integer representing the file
+  # permission bits of *stat*. Returns `nil` otherwise. The meaning of the bits is
+  # platform dependent; on Unix systems, see `stat(2)`.
+  #
+  #     m = File.stat("/tmp").world_writable?         #=> 511
+  #     sprintf("%o", m)                              #=> "777"
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.world_writable?  ->  integer or nil
+  #
   def world_writable?: () -> Integer?
 
+  # Returns `true` if *stat* is writable by the effective user id of this process.
+  #
+  #     File.stat("testfile").writable?   #=> true
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.writable?  ->  true or false
+  #
   def writable?: () -> bool
 
+  # Returns `true` if *stat* is writable by the real user id of this process.
+  #
+  #     File.stat("testfile").writable_real?   #=> true
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.writable_real?  ->  true or false
+  #
   def writable_real?: () -> bool
 
+  # Returns `true` if *stat* is a zero-length file; `false` otherwise.
+  #
+  #     File.stat("testfile").zero?   #=> false
+  #
+  # # arglists 💪👽🚨 << Delete this section
+  #     stat.zero?    -> true or false
+  #
   def zero?: () -> bool
 
   private
