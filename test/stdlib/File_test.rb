@@ -902,3 +902,18 @@ class FileInstanceTest < Minitest::Test
     end
   end
 end
+
+class FileStatSingletonTest < Minitest::Test
+  include Ruby::Signature::Test::TypeAssertions
+
+  testing "singleton(::File::Stat)"
+
+  def test_new
+    assert_send_type "(String) -> File::Stat",
+                     File::Stat, :new, __FILE__
+    assert_send_type "(ToStr) -> File::Stat",
+                     File::Stat, :new, ToStr.new(__FILE__)
+    assert_send_type "(ToPath) -> File::Stat",
+                     File::Stat, :new, ToPath.new(__FILE__)
+  end
+end

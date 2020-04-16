@@ -999,10 +999,7 @@ class File::Stat
   # Create a File::Stat object for the given file name (raising an exception if
   # the file doesn't exist).
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     File::Stat.new(file_name)  -> stat
-  #
-  def initialize: (String file) -> Object
+  def initialize: (string | _ToPath file_name) -> void
 
   # Compares File::Stat objects by comparing their respective modification times.
   #
