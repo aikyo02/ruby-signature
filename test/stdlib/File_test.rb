@@ -930,4 +930,9 @@ class FileStatInstanceTest < Minitest::Test
     assert_send_type "(untyped) -> nil",
                      File::Stat.new(__FILE__), :<=>, ''
   end
+
+  def test_atime
+    assert_send_type "() -> Time",
+                     File::Stat.new(__FILE__), :atime
+  end
 end
