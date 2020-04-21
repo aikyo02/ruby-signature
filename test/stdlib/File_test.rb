@@ -917,3 +917,17 @@ class FileStatSingletonTest < Minitest::Test
                      File::Stat, :new, ToPath.new(__FILE__)
   end
 end
+
+class FileStatInstanceTest < Minitest::Test
+  include Ruby::Signature::Test::TypeAssertions
+
+  testing "::File::Stat"
+
+  def test_cmp
+    file = Tempfile.open("cmp")
+    assert_send_type "(File::Stat) -> Integer",
+                     File::Stat.new(__FILE__), :<=>, File::Stat.new(file.path)
+    assert_send_type "(untyped) -> nil",
+                     File::Stat.new(__FILE__), :<=>, ''
+  end
+end

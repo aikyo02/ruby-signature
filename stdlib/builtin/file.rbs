@@ -1010,10 +1010,7 @@ class File::Stat
   #     f2 = File.new("f2", "w")
   #     f1.stat <=> f2.stat   #=> -1
   #
-  # # arglists 💪👽🚨 << Delete this section
-  #     stat <=> other_stat    -> -1, 0, 1, nil
-  #
-  def <=>: (File::Stat other) -> Integer?
+  def <=>: (untyped other) -> Integer?
 
   # Returns the last access time for this file as an object of class Time.
   #
